@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        var connection = new WebSocket('ws://'+window.location.host+':8080/chat');
+
+        connection.onopen = function () {
+            console.log('Connection open!');
+            connection.send(JSON.stringify({
+                message: "Hello"
+            }));
+        }
+
+        connection.onclose = function () {
+            console.log('Connection closed');
+        }
+
+        connection.onmessage = function (e) {
+            var server_message = e.data;
+            console.log(server_message);
+            document.getElementById("result").innerHTML += server_message + "<br>";
+        }
+
+        let sendMessage = () => {
+            let message = document.getElementById('messageInput').value;
+            let username = document.getElementById('usernameInput').value;
+
+            let messageToSend = {
+                action: "SEND_MESSAGE_TO_ALL",
+                username,
+                message
+            };
+
+            console.log(messageToSend)
+            connection.send(JSON.stringify(messageToSend))
+        }
+    </script>
+</head>
+<body>
+    <h1>Online Chat</h1>
+    <a href="./feed-client.html">Go to feed</a>
+
+    <br />
+    <br />
+    <div>
+        <input type="text" id="usernameInput" placeholder="username" />
+        <input type="text" id="messageInput" placeholder="message" />
+        <input type="button" onclick="sendMessage()" value="Send" />
+    </div>
+    <div id="result"></div>
+</body>
+</html>

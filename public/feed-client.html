@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        var source = new EventSource('http://'+window.location.host+':9090');
+
+        source.onmessage = function (event) {
+            document.getElementById("result").innerHTML += "<h3>" + event.data + "</h3>";
+        };
+    </script>
+</head>
+<body>
+    <div id="result"></div>    
+</body>
+</html>
